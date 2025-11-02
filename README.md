@@ -113,8 +113,9 @@ pixi --version
 
 ## 4. Run Pipeline
 Follow these steps to generate m6A modification predictions using the pre-trained Random Forest model:
+1. Complete the instructions in [Section 3: Installation Guide](#3-installation-guide) before continuing.  
 
-1. Navigate to the project root directory
+2. Navigate to the project root directory
 * Change to the main folder of the project, where all scripts, data, and configuration files are located.
 * This ensures that all file paths used by the pipeline are correctly resolved.  
 
@@ -123,7 +124,7 @@ cd ~/DSA4262---dna1234
 ````
 
 
-2. Activate the Pixi environment
+3. Activate the Pixi environment
 * Install and activate all project dependencies defined in the `pixi.toml` file:
 
 ````
@@ -131,7 +132,7 @@ pixi install
 ````
 
 
-3. Run pipeline to get predictions
+4. Run pipeline to get predictions
 * Execute the main script with your dataset to obtain predictions  
 ````
 pixi run python src/main.py --filename <filename> --verbose
@@ -144,7 +145,7 @@ pixi run python src/main.py --filename dataset0_test.json --verbose
 ````
 
 
-4. Check the output
+5. Check the output
 * After the pipeline completes, the prediction results will be saved in the `output` directory.  
 ````
 ls output
