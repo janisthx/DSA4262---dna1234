@@ -77,7 +77,7 @@ pixi --version
 cd ~/DSA4262---dna1234
 ````
 
-2. Activate pixi
+2. Activate pixi environment
 ````
 pixi install
 ````

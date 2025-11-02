@@ -21,9 +21,10 @@ def predict_m6a(filename: str, verbose: bool = False) -> str:
     root_dir = Path(__file__).parents[1] # root
     data_dir = root_dir / "data" # root/data
     resources_dir = root_dir / "resources" # root/resources
+    output_dir = root_dir / "output" # root/output
     
     filepath = data_dir / f"{filename}_preprocessed.csv" # root/data/dataset0_preprocessed.csv
-    out_filepath = data_dir / f"{filename}_predictions.csv" # root/data/dataset0_predictions.csv
+    out_filepath = output_dir / f"{filename}_predictions.csv" # root/output/dataset0_predictions.csv
     
     if verbose:
         print(f"Loading preprocessed data from {filepath}")
