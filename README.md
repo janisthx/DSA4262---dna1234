@@ -1,5 +1,5 @@
 # DSA4262 - Identification of RNA Modifications from direct RNA-Seq data
-By: Group DNA1234
+By: Group dna1234
 
 ## Table of Contents
 * [Project Description](#1-project-overview)
