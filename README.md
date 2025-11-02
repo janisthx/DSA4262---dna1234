@@ -93,7 +93,7 @@ git clone https://github.com/janisthx/DSA4262---dna1234.git
 ````
 
 ### 3. Install Pixi on Unix  
-* Pixi is a fast, modern package manager for creating reproducible environments. It manages all project dependencies through a single `pixi.toml` file, ensuring consisten setups across systems. 
+* Pixi is a fast, modern package manager for creating reproducible environments. It manages all project dependencies through a single `pixi.toml` file, ensuring consistent setups across systems. 
 
 * To get started, install Pixi on your AWS Ubuntu instance before running any project commands:
 ````
