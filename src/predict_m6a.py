@@ -39,7 +39,7 @@ def predict_m6a(filename: str, verbose: bool = False) -> str:
     if verbose:
         print("Loading model and making predictions")
     
-    model = joblib.load(resources_dir / 'baseline_rf.joblib')
+    model = joblib.load(resources_dir / 'rf_model.joblib')
     pred_prob = model.predict_proba(X_test)[:, 1]
     
     # Format and save predictions

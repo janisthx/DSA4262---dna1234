@@ -1,4 +1,3 @@
-# %%
 import pandas as pd
 import numpy as np
 import argparse
@@ -8,8 +7,7 @@ import joblib
 from sklearn.model_selection import train_test_split, StratifiedKFold, cross_val_score
 from sklearn.ensemble import RandomForestClassifier
 
-# %%
-def train_rf_model(filename, verbose): 
+def train_rf_model(data_filename: str, label_filename: str, verbose: bool = False) -> str:
     """
     Train a Random Forest Classifier on the provided dataset and save the trained model.
 
@@ -28,35 +26,46 @@ def train_rf_model(filename, verbose):
     data_dir = root_dir / "data" # root/data
     resources_dir = root_dir / "resources" # root/resources
 
-    filepath = data_dir / f"{filename}_preprocessed.csv" # root/data/dataset0_preprocessed.csv
-    out_filepath = resources_dir / f"{filename}_trained_model.joblib" # root/resources/dataset0_trained_model.joblib
+    filepath = data_dir / f"{data_filename}_preprocessed.csv" # root/data/dataset0_preprocessed.csv
+    labelpath = data_dir / f"{label_filename}" # root/data/data.info.labelled
+    out_filepath = resources_dir / f"{data_filename}_trained_model.joblib" # root/resources/dataset0_trained_model.joblib
 
-
-    # Load preprocessed data
-    df = pd.read_csv(filepath)
     if verbose:
+        print(f"Data Filepath: {filepath}")
+        print(f"Label Filepath: {labelpath}")
+        print(f"Output Model Filepath: {out_filepath}")
+
+    # Load datasets
+    df = pd.read_csv(filepath)
+    label_df = pd.read_csv(labelpath)
+
+    if verbose:
+        print('Preprocessed Data Loaded')
         print(f"Number of rows: {df.shape[0]}, Number of columns: {df.shape[1]}")
+
+    # Merge features and labels on transcript_id and transcript_position
+    merged_df = pd.merge(df, label_df, on=['transcript_id', 'transcript_position'], how='left') # will add on gene_id and label columns
 
     # Train Test Split
     # 1. Create the Combined Column to stratify on gene_id + label
-    df['combined'] = df['gene_id'].astype(str) + '_' + df['label'].astype(str)
+    merged_df['combined'] = merged_df['gene_id'].astype(str) + '_' + merged_df['label'].astype(str)
 
     # 2. Count occurrences of the combined column
-    counts = df['combined'].value_counts()
+    counts = merged_df['combined'].value_counts()
 
     # 3. If count == 1, replace with just column2 ('label')
-    df['final_group'] = df.apply(
+    merged_df['final_group'] = merged_df.apply(
         lambda row: row['label'] if counts[row['combined']] == 1 else row['combined'],
         axis=1
     )
-    df['final_group'] = df['final_group'].astype(str)
+    merged_df['final_group'] = merged_df['final_group'].astype(str)
 
     # Split into X and y
-    X = df.drop(columns=['gene_id', 'combined', 'label'])
-    y = df['label']
+    X = merged_df.drop(columns=['gene_id', 'combined', 'label'])
+    y = merged_df['label']
 
     # Split into 95% train and 5% test
-    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=df['final_group'], test_size=0.05, random_state=42)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, stratify=merged_df['final_group'], test_size=0.05, random_state=42)
     X_train.drop(columns=['transcript_position', 'transcript_id', 'final_group'], inplace=True)
     X_test.drop(columns=['transcript_position', 'transcript_id', 'final_group'], inplace=True)
 
@@ -102,10 +111,16 @@ def train_rf_model(filename, verbose):
 def _cli():
     parser = argparse.ArgumentParser(description="Train Random Forest Classifier")
     parser.add_argument(
-        "--filename",
+        "--data_filename",
         type=str,
         required=True,
         help="Filename of the preprocessed dataset (without _preprocessed.csv suffix)",
+    )
+    parser.add_argument(
+        "--label_filename",
+        type=str,
+        required=True,
+        help="Filename of the labels",
     )
     parser.add_argument(
         "--verbose",
@@ -113,7 +128,7 @@ def _cli():
         help="Print progress messages",
     )
     args = parser.parse_args()
-    result = train_rf_model(args.filename, args.verbose)
+    result = train_rf_model(args.data_filename, args.label_filename, args.verbose)
     print(result)
 
 if __name__ == "__main__":
