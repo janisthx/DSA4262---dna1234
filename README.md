@@ -48,7 +48,7 @@ Predictions are saved to an output directory in a structured format (CSV) and th
 For a detailed guide on running the pipeline and generating predictions, please see [Section 3: Installation Guide](#3-installation-guide) and [Section 4: Predict m6A Pipeline](#4-predict-m6a-pipeline). 
 
 Below is a visual overview of the prediction pipeline workflow:
-![Pipeline Overview](pipeline_overview.png)
+![Pipeline Overview](pipeline.png)
 
 
 ## 2. Directory Structure
