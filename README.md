@@ -46,52 +46,72 @@ DSA4262---dna1234
 
 
 ## 3. Installation Guide
-1. Open AWS Ubuntu Instance
+1. Open AWS Ubuntu Instance:
 ````
 ssh -i <.pem> user@hostname
 ````
 
-2. Clone the repository
+2. Clone the repository:
 ````
 git clone https://github.com/janisthx/DSA4262---dna1234.git
 ````
 
-3. Install Pixi on Unix
+3. Install Pixi on Unix  
+* Pixi is a fast, modern package manager for creating reproducible environments. It manages all project dependencies through a single `pixi.toml` file, ensuring consisten setups across systems. 
+
+* To get started, install Pixi on your AWS Ubuntu instance before running any project commands:
 ````
 curl -fsSL https://pixi.sh/install.sh | sh
 ````
 
-4. Source your shell configuration
+4. Source your shell configuration  
+* After installation, reload your shell configuration to activate Pixi:
 ````
 source ~/.bashrc
 ````
 
-5. Verify the installation
+5. Verify the installation  
+* Confirm that Pixi was installed successfully:
 ````
 pixi --version
 ````
 
 ## 4. Run Pipeline
-1. Change to root directory of the project
+Follow these steps to generate m6A modification predictions using the pre-trained Random Forest model:
+
+1. Navigate to the project root directory
+* Change to the main folder of the project, where all scripts, data, and configuration files are located.
+* This ensures that all file paths used by the pipeline are correctly resolved.  
+
 ````
 cd ~/DSA4262---dna1234
 ````
 
-2. Activate pixi environment
+
+2. Activate the Pixi environment
+* Install and activate all project dependencies defined in the `pixi.toml` file:
+
 ````
 pixi install
 ````
 
+
 3. Run pipeline to get predictions
+* Execute the main script with your dataset to obtain predictions  
 ````
 pixi run python src/main.py --filename <filename> --verbose
 ````
+* Replace `<filename>` with the name of your dataset file without the extension `.json`
+The `--verbose` flag enables detailed logging so that the progress can be monitored.  
 * Example:
 ```` 
 pixi run python src/main.py --filename dataset0_test.json --verbose
 ````
 
-4. Check for prediction output
+
+4. Check the output
+* After the pipeline completes, the prediction results will be saved in the `output` directory.  
 ````
 ls output
 ````
+Look for your generated CSV file containing m6A modification predictions. These results can now be used for downstream analysis or visualization. 
