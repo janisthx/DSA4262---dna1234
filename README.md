@@ -5,7 +5,8 @@ By: Group DNA1234
 * [Project Description](#1-project-overview)
 * [Directory Structure](#2-directory-structure)
 * [Installation Guide](#3-installation-guide)
-* [Run Pipeline](#4-run-pipeline)
+* [Predict m6A Pipeline](#4-predict-m6a-pipeline)
+* [Model Training Pipeline](#5-model-training-pipeline)
 
 
 ## 1. Project Overview
@@ -25,10 +26,10 @@ We evaluated 6 machine learning models using an optimized feature set:
 
 To handle the class imbalance, we experimented with both undersampling and oversampling techniques. The process also included hyperparameter tuning and calibration adjustment. Model performance was primarily assessed using PR-AUC, and based on these results, **Random Forest** was selected as the final model for implementation and deployment. 
 
-For details on the training workflow, see `src/model_training.py`. Additionally, Jupyter Notebooks exploring individual models are available in the `notebooks` directory for reference.  
+For details on the training workflow, see [Section 3: Installation Guide](#3-installation-guide) and [Section 5: Model Training Pipline](#5-model-training-pipeline). Additionally, Jupyter Notebooks exploring individual models are available in the `notebooks` directory for reference.  
 
 
-### c. Pipeline Description
+### c. Prediction Pipeline Description
 This pipeline is designed to predict m6A RNA modifications from raw `.json` sequencing data. It consists of several key stages:  
 1. Data Parsing and Summarization  
 The pipeline reads the raw `.json` input and extracts relevant information such as transcript IDs, positions, sequences, and initial features. It then summarizes the data into a structured format suitable for downstream processing.  
@@ -44,9 +45,9 @@ The preprocessed data is fed into a pre-trained Random Forest model, which outpu
 4. Output Generation  
 Predictions are saved to an output directory in a structured format (CSV) and the results can be used for downstream analysis or visualizations.  
 
-For a detailed guide on running the pipeline and generating predictions, please see [Section 3: Installation Guide](#3-installation-guide) and [Section 4: Run Pipeline](#4-run-pipeline). 
+For a detailed guide on running the pipeline and generating predictions, please see [Section 3: Installation Guide](#3-installation-guide) and [Section 4: Predict m6A Pipeline](#4-predict-m6a-pipeline). 
 
-Below is a visual overview of the pipeline workflow:
+Below is a visual overview of the prediction pipeline workflow:
 ![Pipeline Overview](pipeline_overview.png)
 
 
@@ -54,18 +55,18 @@ Below is a visual overview of the pipeline workflow:
 ```
 DSA4262---dna1234
 ├── data/
-|   ├── model_training
-|       └── dataset0.json
-|   ├── dataset0_test.json
+|   └── data.info.labelled
+|   └── test.json
 |
 ├── src/
 |   └── data_parsing.py
 |   └── data_preprocessing.py
 |   └── predict_m6a.py
-|   └── main.py
+|   └── predict_pipeline_main.py
+|   └── train_model.py
+|   └── training_pipeline_main.py
 |   └── utils.py
 |   └── __init__.py
-|   └── model_training.py
 |
 ├── resources/
 |   └── kmer_seq_encoder.joblib
@@ -81,17 +82,17 @@ DSA4262---dna1234
 
 
 ## 3. Installation Guide
-1. Open AWS Ubuntu Instance:
+### 1. Open AWS Ubuntu Instance:
 ````
 ssh -i <.pem> user@hostname
 ````
 
-2. Clone the repository:
+### 2. Clone the repository:
 ````
 git clone https://github.com/janisthx/DSA4262---dna1234.git
 ````
 
-3. Install Pixi on Unix  
+### 3. Install Pixi on Unix  
 * Pixi is a fast, modern package manager for creating reproducible environments. It manages all project dependencies through a single `pixi.toml` file, ensuring consisten setups across systems. 
 
 * To get started, install Pixi on your AWS Ubuntu instance before running any project commands:
@@ -99,23 +100,23 @@ git clone https://github.com/janisthx/DSA4262---dna1234.git
 curl -fsSL https://pixi.sh/install.sh | sh
 ````
 
-4. Source your shell configuration  
+### 4. Source your shell configuration  
 * After installation, reload your shell configuration to activate Pixi:
 ````
 source ~/.bashrc
 ````
 
-5. Verify the installation  
+### 5. Verify the installation  
 * Confirm that Pixi was installed successfully:
 ````
 pixi --version
 ````
 
-## 4. Run Pipeline
+## 4. Predict m6A Pipeline
 Follow these steps to generate m6A modification predictions using the pre-trained Random Forest model:
-1. Complete the instructions in [Section 3: Installation Guide](#3-installation-guide) before continuing.  
+### 1. Complete the instructions in [Section 3: Installation Guide](#3-installation-guide) before continuing.  
 
-2. Navigate to the project root directory
+### 2. Navigate to the project root directory
 * Change to the main folder of the project, where all scripts, data, and configuration files are located.
 * This ensures that all file paths used by the pipeline are correctly resolved.  
 
@@ -124,30 +125,83 @@ cd ~/DSA4262---dna1234
 ````
 
 
-3. Activate the Pixi environment
+### 3. Activate the Pixi environment
+* Install and activate all project dependencies defined in the `pixi.toml` file:
+
+````
+pixi install
+````
+### 4. Place your test set in the `data` directory
+* For testing purposes, we provide a small test set to run the pipeline. This file is called `test.json`.
+* Check that your test set is in:
+````
+ls data
+````
+
+
+### 5. Run pipeline to get predictions
+* Execute the main script with your dataset to obtain predictions  
+````
+pixi run python src/predict_pipeline_main.py --filename <filename> --verbose
+
+# Example
+pixi run python src/predict_pipeline_main.py --filename test --verbose
+````
+* Replace `<filename>` with the name of your dataset file without the extension `.json`
+    * E.g. `--filename test` if the full name of the file is test.json
+* The `--verbose` flag enables detailed logging so that the progress can be monitored.  
+
+
+### 6. Check the output
+* After the pipeline completes, the prediction results will be saved in the `output` directory.  
+````
+ls output
+````
+Look for your generated CSV file containing m6A modification predictions. E.g. `test_predictions.csv`
+
+
+## 5. Model Training Pipeline
+Follow these steps to reproduce the Random Forest model: 
+### 1. Complete the instructions in [Section 3: Installation Guide](#3-installation-guide) before continuing.  
+
+### 2. Navigate to the project root directory
+* Change to the main folder of the project, where all scripts, data, and configuration files are located.
+* This ensures that all file paths used by the pipeline are correctly resolved.  
+
+````
+cd ~/DSA4262---dna1234
+````
+
+
+### 3. Activate the Pixi environment
 * Install and activate all project dependencies defined in the `pixi.toml` file:
 
 ````
 pixi install
 ````
 
-
-4. Run pipeline to get predictions
-* Execute the main script with your dataset to obtain predictions  
-````
-pixi run python src/main.py --filename <filename> --verbose
-````
-* Replace `<filename>` with the name of your dataset file without the extension `.json`
-The `--verbose` flag enables detailed logging so that the progress can be monitored.  
-* Example:
-```` 
-pixi run python src/main.py --filename dataset0_test.json --verbose
-````
+### 4. Place your training set in the `data` directory
+* Ensure that both the raw `.json` file and labelled data file (m6A labels) are in the `data` directory.
 
 
-5. Check the output
-* After the pipeline completes, the prediction results will be saved in the `output` directory.  
+### 5. Run pipeline to get predictions
+* Execute the main script with your dataset to train the model
 ````
-ls output
+pixi run python src/training_pipeline_main.py --data_filename <data-filename> --label_filename <label-filename> --verbose
+
+# Example
+pixi run python src/training_pipeline_main.py --data_filename dataset0 --label_filename data.info.labelled --verbose
 ````
-Look for your generated CSV file containing m6A modification predictions. 
+* Replace `<data-filename>` with the name of your dataset file without the extension `.json`
+    * E.g. `--data_filename test` if the full filename is test.json
+* Replace `<label-filename>` with the name of your labelled file with the extension  
+    * E.g. `--label_filename data.info.labelled` if the full filename is data.info.labelled  
+* The `--verbose` flag enables detailed logging so that the progress can be monitored.  
+
+
+### 6. Check the output
+* After the pipeline completes, the trained model will be saved in the `resources` directory.  
+````
+ls resources
+````
+Look for your trained model. E.g. `dataset0_trained_model.joblib`
