@@ -44,7 +44,7 @@ The preprocessed data is fed into a pre-trained Random Forest model, which outpu
 4. Output Generation  
 Predictions are saved to an output directory in a structured format (CSV) and the results can be used for downstream analysis or visualizations.  
 
-For a detailed guide on running the pipeline and generating predictions, please see [Section 4: Run Pipeline](#4-run-pipeline). 
+For a detailed guide on running the pipeline and generating predictions, please see [Section 3: Installation Guide](#3-installation-guide) and [Section 4: Run Pipeline](#4-run-pipeline). 
 
 Below is a visual overview of the pipeline workflow:
 ![Pipeline Overview](pipeline_overview.png)
