@@ -136,6 +136,9 @@ pixi install
 * Check that your test set is in:
 ````
 ls data
+
+# Should see a file called: 
+test.json
 ````
 
 
@@ -144,7 +147,7 @@ ls data
 ````
 pixi run python src/predict_pipeline_main.py --filename <filename> --verbose
 
-# Example
+# Example (Copy this command for test run)
 pixi run python src/predict_pipeline_main.py --filename test --verbose
 ````
 * Replace `<filename>` with the name of your dataset file without the extension `.json`
@@ -156,6 +159,9 @@ pixi run python src/predict_pipeline_main.py --filename test --verbose
 * After the pipeline completes, the prediction results will be saved in the `output` directory.  
 ````
 ls output
+
+# Should see a file called:
+test_predictions.csv
 ````
 Look for your generated CSV file containing m6A modification predictions. E.g. `test_predictions.csv`
 
@@ -203,5 +209,8 @@ pixi run python src/training_pipeline_main.py --data_filename dataset0 --label_f
 * After the pipeline completes, the trained model will be saved in the `resources` directory.  
 ````
 ls resources
+
+# Example of Model Object:
+dataset0_trained_model.joblib
 ````
 Look for your trained model. E.g. `dataset0_trained_model.joblib`
