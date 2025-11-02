@@ -2,18 +2,53 @@
 By: Group DNA1234
 
 ## Table of Contents
-* [Project Description](#project-description)
-* [Directory Structure](#directory-structure)
-* [Installation Guide](#installation-guide)
-* [Run Pipeline](#run-pipeline)
+* [Project Description](#1-project-overview)
+* [Directory Structure](#2-directory-structure)
+* [Installation Guide](#3-installation-guide)
+* [Run Pipeline](#4-run-pipeline)
 
 
 ## 1. Project Overview
+### a. Project Description
 RNA modifications are chemical changes to RNA bases that can influence gene expression and function. Among these, m6A is one of the most prevalent modifications found in mRNA. This project aims to detect m6A sites by developing a machine learning classifier trained on direct RNA-Seq data.  
 
 Through feature engineering, model experimentation and hyperparameter tuning, a **Random Forest** model was selected as the best performer, optimized specifically for PR-AUC to address the class imbalance in the dataset.
 
-To predict m6A modification, the pipeline takes in the raw `.json` dataset, parse and summarizes the data, performs preprocessing, and generates predictions using the **pre-trained Random Forest**. For more details, please refer to [Section 4: Run Pipeline](#4-run-pipeline).
+### b. Model Selection and Development
+We evaluated 6 machine learning models using an optimized feature set:
+* Logistic Regression (baseline comparison)
+* Random Forest
+* XGBoost
+* Neural Network
+* CatBoost
+* LightGBM
+
+To handle the class imbalance, we experimented with both undersampling and oversampling techniques. The process also included hyperparameter tuning and calibration adjustment. Model performance was primarily assessed using PR-AUC, and based on these results, **Random Forest** was selected as the final model for implementation and deployment. 
+
+For details on the training workflow, see `src/model_training.py`. Additionally, Jupyter Notebooks exploring individual models are available in the `notebooks` directory for reference.  
+
+
+### c. Pipeline Description
+This pipeline is designed to predict m6A RNA modifications from raw `.json` sequencing data. It consists of several key stages:  
+1. Data Parsing and Summarization  
+The pipeline reads the raw `.json` input and extracts relevant information such as transcript IDs, positions, sequences, and initial features. It then summarizes the data into a structured format suitable for downstream processing.  
+
+
+2. Preprocessing and Feature Engineering  
+The extracted data undergoes preprocessing, including one hot encoding and log transformations, and other feature engineering steps. This ensures that the input features are scaled and formatted appropriately for the machine learning model.  
+
+
+3. Prediction using Pre-trained Random Forest  
+The preprocessed data is fed into a pre-trained Random Forest model, which outputs predictions for m6A modifications. 
+
+4. Output Generation  
+Predictions are saved to an output directory in a structured format (CSV) and the results can be used for downstream analysis or visualizations.  
+
+For a detailed guide on running the pipeline and generating predictions, please see [Section 4: Run Pipeline](#4-run-pipeline). 
+
+Below is a visual overview of the pipeline workflow:
+![Pipeline Overview](pipeline_overview.png)
+
 
 ## 2. Directory Structure
 ```
@@ -114,4 +149,4 @@ pixi run python src/main.py --filename dataset0_test.json --verbose
 ````
 ls output
 ````
-Look for your generated CSV file containing m6A modification predictions. These results can now be used for downstream analysis or visualization. 
+Look for your generated CSV file containing m6A modification predictions. 
