@@ -137,7 +137,7 @@ pixi install
 ````
 ls data
 
-# Should see a file called: 
+# Expected Output:
 test.json
 ````
 
@@ -160,7 +160,7 @@ pixi run python src/predict_pipeline_main.py --filename test --verbose
 ````
 ls output
 
-# Should see a file called:
+# Expected Output:
 test_predictions.csv
 ````
 Look for your generated CSV file containing m6A modification predictions. E.g. `test_predictions.csv`
