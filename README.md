@@ -84,7 +84,10 @@ DSA4262---dna1234
 ## 3. Installation Guide
 ### 1. Open AWS Ubuntu Instance:
 ````
-ssh -i <.pem> user@hostname
+ssh -i <machine-name>.pem user@hostname
+
+# Example (Ronin Instance)
+ssh -i <machine-name>.pem ubuntu@<machine-name>.nus.cloud
 ````
 
 ### 2. Clone the repository:
@@ -139,6 +142,9 @@ ls data
 
 # Expected Output:
 test.json
+
+# To see first 5 lines:
+head -n 5 data/test.json
 ````
 
 
@@ -162,6 +168,9 @@ ls output
 
 # Expected Output:
 test_predictions.csv
+
+# To see first 5 lines:
+head -n 5 output/test_predictions.csv
 ````
 Look for your generated CSV file containing m6A modification predictions. E.g. `test_predictions.csv`
 
