@@ -178,8 +178,10 @@ Look for your generated CSV file containing m6A modification predictions. E.g. `
 ## 5. Model Training Pipeline
 Follow these steps to reproduce the Random Forest model: 
 
+### Note: This section (Section 5: Model Training Pipeline) is NOT part of the prediction test run. This is purely for reproducing the model using the training set (dataset0).
+
 ### 1. Complete the instructions in [Section 3: Installation Guide](#3-installation-guide) before continuing.  
-#### Note: This section (Section 5: Model Training Pipeline) is NOT part of the prediction test run. This is purely for reproducing the model using the training set (dataset0).
+
 
 ### 2. Navigate to the project root directory
 * Change to the main folder of the project, where all scripts, data, and configuration files are located.
